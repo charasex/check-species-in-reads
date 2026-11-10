@@ -1,0 +1,10 @@
+samples:
+	- sample1
+	- sample2
+
+# dataset for Kraken
+db_dir: "path/to/file"
+
+# fasta file with BOLD to kraken
+bold_fasta: "path/to/file"
+
