@@ -1,10 +1,11 @@
-samples:
-	- sample1
-	- sample2
+tools: kraken # or kmers
+sample: config/sample.tsv
+# where the species read are stocked of the Poolseq
+wdir: /work/project/AtlasG2P/data/raw
+BOLD: BOLD_Characiformes_basename.fasta
 
-# dataset for Kraken
-db_dir: "path/to/file"
+# KRAKEN parameters
+confidence: 0.15
 
-# fasta file with BOLD to kraken
-bold_fasta: "path/to/file"
-
+# Kmer parameters
+kmer_size: 21

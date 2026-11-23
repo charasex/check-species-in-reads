@@ -1,0 +1,5 @@
+species_id	sex	R1	R2
+Leporinus_acutidens	M	Leporinus_acutidens_male-LACU-M_R1_001.fastq.gz	Leporinus_acutidens_male-LACU-M_R2_001.fastq.gz
+Leporinus_acutidens	F	Leporinus_acutidens_female-LACU-F_R1_001.fastq.gz	Leporinus_acutidens_female-LACU-F_R2_001.fastq.gz
+Leporinus_friderici	M	Leporinus_friderici_male-LFRI-M_R1_001.fastq.gz	Leporinus_friderici_male-LFRI-M_R2_001.fastq.gz
+Leporinus_friderici	F	Leporinus_friderici_female-LFRI-F_R1_001.fastq.gz	Leporinus_friderici_female-LFRI-F_R2_001.fastq.gz

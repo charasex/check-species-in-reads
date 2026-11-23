@@ -1,0 +1,10 @@
+name: kmer
+channels:
+  - bioconda 
+  - confa-forge
+dependencies:
+  - kmtricks
+  - blast
+  - spades
+  - back_to_sequences
+  
