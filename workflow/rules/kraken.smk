@@ -1,6 +1,8 @@
+# rules for kraken-based analysis
+
 rule downloadtaxonomy_kraken:
     """
-    download taxonomy for kraken
+    download taxonomy for kraken to create a custom database
     """
     output:
         flag = touch("CustomFishDB/taxonomy_step.done")
@@ -13,7 +15,7 @@ rule downloadtaxonomy_kraken:
 
 rule add_sequence_to_db:
     """
-    add fasta file of BOLD to library
+    add fasta file of BOLD to library for after compilation of the database
     """
     input:
         flag = "CustomFishDB/taxonomy_step.done",
@@ -29,7 +31,7 @@ rule add_sequence_to_db:
 
 rule build_db:
     """
-    compilation of DB
+    compilation of database for kraken
     """
     input:
         flag = "CustomFishDB/library_step.done"
@@ -43,16 +45,21 @@ rule build_db:
     shell:
         "kraken2-build --build --threads {threads} --db {params.db}"
 
+
+
+# if you have already created the database, the pipeline will skip the steps above and go directly to the kraken analysis. If you want to re-create the database, 
+# delete the CustomFishDB folder and re-run the pipeline.
+
 rule run_kraken:
     """
-    run Kraken
+    run Kraken on custom database with reads from PoolSeq data
     """
     input:
         unpack(get_fastqs),
         db_flag = "CustomFishDB/build_step.done"
     output:
-        report = WDIR + "/{species}/PoolSeq/MGX/check_contamination/{species}_{sex}_kraken.report",
-        out = temp(WDIR + "/{species}/PoolSeq/MGX/check_contamination/{species}_{sex}_kraken.out")
+        report = OUTDIR + "/{species}/PoolSeq_check/{species}_{sex}_kraken.report",
+        out = temp(OUTDIR + "/{species}/PoolSeq_check/{species}_{sex}_kraken.out")
     params:
         db = "CustomFishDB",
         conf = config["confidence"]

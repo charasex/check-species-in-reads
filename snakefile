@@ -3,8 +3,11 @@ import pandas as pd
 configfile: "config/config.yaml"
 
 samples_df = pd.read_csv(config["sample"], sep="\t").set_index(["species_id", "sex"], drop=False)
+# path to the read files and output directory
 WDIR = config["wdir"]
+OUTDIR = config["outdir"]
 
+# function to get the fastq files for a given species and sex
 def get_fastqs(wildcards):
     row = samples_df.loc[(wildcards.species, wildcards.sex)]
     return {
@@ -14,10 +17,11 @@ def get_fastqs(wildcards):
 
 tool = config["tools"]
 
+# choose the workflow to run based on the tool specified in the config file
 if tool == "kraken":
     include: "workflow/rules/kraken.smk"
     TARGETS = expand(
-        WDIR + "/{species}/PoolSeq/MGX/check_contamination/{species}_{sex}_kraken.report",
+        OUTDIR + "/{species}/PoolSeq_check/{species}_{sex}_kraken.report",
         zip,
         species=samples_df["species_id"],
         sex=samples_df["sex"],
@@ -25,7 +29,7 @@ if tool == "kraken":
 elif tool == "kmer":
     include: "workflow/rules/kmers.smk"
     TARGETS = expand(
-        WDIR + "/{species}/PoolSeq/MGX/check_contamination/kmers/{species}_{sex}_blast_output.tsv",
+        OUTDIR + "/{species}/PoolSeq_check/{species}_{sex}_blast_output.tsv",
         zip,
         species=samples_df["species_id"],
         sex=samples_df["sex"],

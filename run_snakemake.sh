@@ -38,4 +38,4 @@
 
 # echo "Running Snakemake pipeline for species $species..."
 
-snakemake --configfile config/config.yaml --use-conda --conda-frontend mamba --printshellcmds --cores 10
+snakemake --configfile config/config.yaml --use-conda --conda-frontend mamba --printshellcmds --cores 10 --rerun-incomplete

@@ -1,8 +1,23 @@
-tools: kraken # or kmers
+# This is a sample configuration file for the workflow.
+
+# Choose the tool to use for species identification: kraken or kmer
+tools: kraken # or kmer
+
+# Path to the sample file
+# this file should contain the list of samples to process, one per line, with the following format:
+# sample_id    sex    r1.fastq.gz    r2.fastq.gz
 sample: config/sample.tsv
-# where the species read are stocked of the Poolseq
+
+# path of read files
 wdir: /work/project/AtlasG2P/data/raw
+# path of output files
+outdir: /work/project/AtlasG2P/results
+
+# path to the BOLD database files
+# BOLD is for kraken
+# BOLD_blast is for kmer
 BOLD: BOLD_Characiformes_basename.fasta
+BOLD_blast: BOLD_Characiformes_db.fasta
 
 # KRAKEN parameters
 confidence: 0.15

@@ -1,7 +1,7 @@
 name: kmer
 channels:
-  - bioconda 
-  - confa-forge
+  - conda-forge
+  - bioconda
 dependencies:
   - kmtricks
   - blast
