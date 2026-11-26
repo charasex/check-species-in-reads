@@ -1,7 +1,5 @@
 # check-species-in-reads
 
-# check-species-in-reads
-
 A Snakemake workflow to verify species identity and screen for cross-species contamination in paired-end sequencing reads. 
 
 The pipeline supports two selectable approaches configured via `config/config.yaml`:
@@ -105,3 +103,8 @@ snakemake --use-conda --cores 10 --config tools=kmer
 * **Per-sample results** (written inside `<wdir>/<species_id>/`):
   * **Kraken2 mode**: `PoolSeq/MGX/results/check_contamination/<species>_<sex>_kraken.report`
   * **K-mer mode**: `<kmerDir>/<species>_<sex>_blast_output.tsv` (tabular BLASTn `outfmt 6` results of assembled contigs against BOLD)
+
+# tested tools
+<img width="4200" height="2400" alt="detection_contamination_blast" src="https://github.com/user-attachments/assets/6ddfa009-9fbf-4f88-b3c1-529177ffa735" />
+<img width="3600" height="2400" alt="kraken_taux_et_proportion" src="https://github.com/user-attachments/assets/912477bd-1de4-444e-b300-bd7d99557f63" />
+
