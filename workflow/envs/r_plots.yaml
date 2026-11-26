@@ -1,0 +1,12 @@
+name: r_plots
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - r-base>=4.3
+  - r-dplyr
+  - r-stringr
+  - r-ggplot2
+  - r-ggrepel
+  - r-patchwork
