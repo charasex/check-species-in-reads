@@ -4,20 +4,18 @@ library(ggplot2)
 library(ggrepel)
 library(patchwork)
 
-# --- 1. Gestion des entrées/sorties (Snakemake ou exécution manuelle) ---
-if (exists("snakemake")) {
-  fichier_kraken  <- snakemake@input[[1]]
-  fichier_sortie  <- snakemake@output[[1]]
-  nom_echantillon <- if (!is.null(snakemake@wildcards[["sample"]])) {
-    snakemake@wildcards[["sample"]]
-  } else {
-    tools::file_path_sans_ext(basename(fichier_kraken))
-  }
-} else {
-  # Mode test local dans RStudio
-  fichier_kraken  <- "mix_5_30_conf015.report"
-  fichier_sortie  <- "detection_test_contamination_kraken.png"
-  nom_echantillon <- tools::file_path_sans_ext(basename(fichier_kraken))
+# --- 1. Entrées / sorties Snakemake ---
+fichier_kraken  <- snakemake@input[["report"]]
+fichier_sortie  <- snakemake@output[["plot"]]
+nom_echantillon <- paste(snakemake@wildcards[["species"]], snakemake@wildcards[["sex"]], sep = "_")
+
+# Sécurité si le rapport Kraken2 est vide (0 octet)
+if (!file.exists(fichier_kraken) || file.info(fichier_kraken)$size == 0) {
+  p_vide <- ggplot() +
+    annotate("text", x = 0.5, y = 0.5, label = paste("Fichier vide :", nom_echantillon)) +
+    theme_void()
+  ggsave(fichier_sortie, p_vide, width = 10, height = 7, dpi = 300)
+  quit(save = "no", status = 0)
 }
 
 # --- 2. Lecture du rapport Kraken2 et extraction des 2 principales espèces ---
@@ -37,11 +35,10 @@ donnees_detectees <- read.delim(
     kmers       = kmers_clade,
     pct_kmers   = (kmers / sum(kmers)) * 100,
     espece      = factor(espece, levels = espece),
-    # Position verticale exacte du centre de chaque segment empilé
     y_mid       = rev(cumsum(rev(pct_kmers))) - (pct_kmers / 2)
   )
 
-# Sécurité si aucune espèce n'est détectée dans un échantillon vide
+# Sécurité si aucune espèce n'est détectée
 if (nrow(donnees_detectees) == 0) {
   p_vide <- ggplot() +
     annotate("text", x = 0.5, y = 0.5, label = paste("Aucune espèce détectée :", nom_echantillon)) +
@@ -79,13 +76,11 @@ p_kmers_brute <- ggplot(donnees_detectees, aes(x = echantillon, y = kmers, fill 
 # --- 4. Graphique B : Proportion relative observée ---
 p_part_obs <- ggplot(donnees_detectees, aes(x = echantillon, y = pct_kmers, fill = espece)) +
   geom_col(width = 0.4) +
-  # Étiquette centrée pour les proportions >= 5 %
   geom_text(
     data = filter(donnees_detectees, pct_kmers >= 5),
     aes(y = y_mid, label = sprintf("%.1f %%", pct_kmers)),
     color = "white", fontface = "bold", size = 3.8
   ) +
-  # Étiquette orange déportée avec flèche pour les faibles proportions (< 5 %)
   geom_label_repel(
     data = filter(donnees_detectees, pct_kmers < 5),
     aes(y = y_mid, label = sprintf("%.2f %%", pct_kmers)),

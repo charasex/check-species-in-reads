@@ -7,12 +7,11 @@ rule plot_kraken:
     input:
         report = OUTDIR + "/{species}/PoolSeq_check/{species}_{sex}_kraken.report"
     output:
-        plot = OUTDIR + "/{species}/PoolSeq_check/plots/{sample}_{sex}_kraken.png""
+        plot = OUTDIR + "/{species}/PoolSeq_check/plots/{species}_{sex}_kraken.png"
     conda:
         "../envs/r_plots.yaml"
     script:
         "../scripts/plot_result_kraken.R"
-    pass
 
 rule plot_blast:
     """
@@ -26,5 +25,4 @@ rule plot_blast:
         "../envs/r_plots.yaml"
     script:
         "../scripts/plot_result_blast.R"
-    pass
 

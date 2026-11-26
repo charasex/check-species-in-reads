@@ -21,6 +21,7 @@ tool = config["tools"]
 if tool == "both":
     include: "workflow/rules/kraken.smk"
     include: "workflow/rules/kmers.smk"
+    include: "workflow/rules/plot_result.smk"
     TARGETS = (
         expand(OUTDIR + "/{species}/PoolSeq_check/{species}_{sex}_kraken.report", 
             zip, 
@@ -32,23 +33,47 @@ if tool == "both":
             species=samples_df["species_id"], 
             sex=samples_df["sex"],
         )
+        + expand(OUTDIR + "/{species}/PoolSeq_check/plots/{species}_{sex}_blast.png",
+            zip,
+            species=samples_df["species_id"], 
+            sex=samples_df["sex"],
+        )
+        + expand(OUTDIR + "/{species}/PoolSeq_check/plots/{species}_{sex}_kraken.png",
+            zip,
+            species=samples_df["species_id"], 
+            sex=samples_df["sex"],
+        )
     )
 
 elif tool == "kraken":
     include: "workflow/rules/kraken.smk"
-    TARGETS = expand(
-        OUTDIR + "/{species}/PoolSeq_check/{species}_{sex}_kraken.report",
-        zip,
-        species=samples_df["species_id"],
-        sex=samples_df["sex"],
+    include: "workflow/rules/plot_result.smk"
+    TARGETS = (
+        expand(OUTDIR + "/{species}/PoolSeq_check/{species}_{sex}_kraken.report",
+            zip,
+            species=samples_df["species_id"],
+            sex=samples_df["sex"],
+        )
+        + expand(OUTDIR + "/{species}/PoolSeq_check/plots/{species}_{sex}_kraken.png",
+            zip,
+            species=samples_df["species_id"], 
+            sex=samples_df["sex"],
+        )
     )
 elif tool == "kmer":
     include: "workflow/rules/kmers.smk"
-    TARGETS = expand(
-        OUTDIR + "/{species}/PoolSeq_check/{species}_{sex}_blast_output.tsv",
-        zip,
-        species=samples_df["species_id"],
-        sex=samples_df["sex"],
+    include: "workflow/rules/plot_result.smk"
+    TARGETS = (
+        expand(OUTDIR + "/{species}/PoolSeq_check/{species}_{sex}_blast_output.tsv",
+            zip,
+            species=samples_df["species_id"],
+            sex=samples_df["sex"],
+        )
+        + expand(OUTDIR + "/{species}/PoolSeq_check/plots/{species}_{sex}_blast.png",
+            zip,
+            species=samples_df["species_id"], 
+            sex=samples_df["sex"],
+        )
     )
 else:
     raise ValueError(f"unknow tools in config.yaml : '{tool}'. choose 'kraken' or 'kmer' or 'both'")
