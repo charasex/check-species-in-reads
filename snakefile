@@ -18,7 +18,23 @@ def get_fastqs(wildcards):
 tool = config["tools"]
 
 # choose the workflow to run based on the tool specified in the config file
-if tool == "kraken":
+if tool == "both":
+    include: "workflow/rules/kraken.smk"
+    include: "workflow/rules/kmers.smk"
+    TARGETS = (
+        expand(OUTDIR + "/{species}/PoolSeq_check/{species}_{sex}_kraken.report", 
+            zip, 
+            species=samples_df["species_id"], 
+            sex=samples_df["sex"],
+        )
+        + expand(OUTDIR + "/{species}/PoolSeq_check/{species}_{sex}_blast_output.tsv", 
+            zip,
+            species=samples_df["species_id"], 
+            sex=samples_df["sex"],
+        )
+    )
+
+elif tool == "kraken":
     include: "workflow/rules/kraken.smk"
     TARGETS = expand(
         OUTDIR + "/{species}/PoolSeq_check/{species}_{sex}_kraken.report",
@@ -35,7 +51,7 @@ elif tool == "kmer":
         sex=samples_df["sex"],
     )
 else:
-    raise ValueError(f"unknow tools in config.yaml : '{tool}'. choose 'kraken' or 'kmer'.")
+    raise ValueError(f"unknow tools in config.yaml : '{tool}'. choose 'kraken' or 'kmer' or 'both'")
 
 
 

@@ -1,7 +1,7 @@
 # This is a sample configuration file for the workflow.
 
 # Choose the tool to use for species identification: kraken or kmer
-tools: kraken # or kmer
+tools: both # kraken or kmer for single tools to use
 
 # Path to the sample file
 # this file should contain the list of samples to process, one per line, with the following format:
@@ -11,7 +11,7 @@ sample: config/sample.tsv
 # path of read files
 wdir: /work/project/AtlasG2P/data/raw
 # path of output files
-outdir: /work/project/AtlasG2P/results
+outdir: /home/ichninak/work/data
 
 # path to the BOLD database files
 # BOLD is for kraken

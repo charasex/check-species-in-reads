@@ -9,7 +9,7 @@
 # --cores 1 here would silently undo the whole of set-threads.
 #SBATCH --mail-user=ishaac.chninak@inrae.fr
 #SBATCH --mail-type=all
-#SBATCH --cpus-per-task=10
+#SBATCH --cpus-per-task=20
 #SBATCH --mem=20GB
 #SBATCH --job-name=kraken
 #SBATCH --output=log/slurm-%A.out

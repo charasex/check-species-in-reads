@@ -10,7 +10,7 @@ rule make_blast_db:
     output:
         flag = touch("dbBlast/build_db.done")
     params:
-        db = "dbBlast/CustomBlastBoldDB/"
+        db = "dbBlast/CustomBlastBoldDB"
     conda:
         "../envs/kmer.yaml"
     shell:
