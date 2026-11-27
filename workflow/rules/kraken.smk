@@ -56,7 +56,8 @@ rule run_kraken:
     """
     input:
         unpack(get_fastqs),
-        db_flag = "CustomFishDB/build_step.done"
+        db_flag = "CustomFishDB/build_step.done",
+        checksums = INITIAL_CHECKSUMS
     output:
         report = OUTDIR + "/{species}/PoolSeq_check/{species}_{sex}_kraken.report",
         out = temp(OUTDIR + "/{species}/PoolSeq_check/{species}_{sex}_kraken.out")

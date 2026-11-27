@@ -20,7 +20,8 @@ rule kmtricks_pipeline:
     "run kmtricks pipeline to extract kmers from BOLD database"
     input:
         unpack(get_fastqs),
-        fof = "fof.txt"
+        fof = "fof.txt",
+        checksums = INITIAL_CHECKSUMS
     output:
         matrix = temp(KMER_DIR + "/resultats_kmtricks/matrices/matrix_0.count")
     params:
@@ -95,7 +96,8 @@ rule back_to_sequences:
         unpack(get_fastqs),
         kmers = KMER_DIR + "/kmers_clean.fasta",
         in_list = KMER_DIR + "/in_reads.txt",
-        out_list = KMER_DIR + "/out_reads.txt"
+        out_list = KMER_DIR + "/out_reads.txt",
+        checksums = INITIAL_CHECKSUMS
     output:
         r1 = temp(KMER_DIR + "/reads_extract_1.fastq"),
         r2 = temp(KMER_DIR + "/reads_extract_2.fastq")

@@ -15,6 +15,14 @@ def get_fastqs(wildcards):
         "r2": f"{WDIR}/{wildcards.species}/PoolSeq/MGX/{row['R2']}",
     }
 
+# Checksums
+
+CHECKSUM_DIR = OUTDIR + "/{species}/checksums/{sex}"
+
+INITIAL_CHECKSUMS = CHECKSUM_DIR + "/initial.sha256"
+VERIFIED_CHECKSUMS = CHECKSUM_DIR + "/integrity_verified.txt"
+
+
 tool = config["tools"]
 
 # choose the workflow to run based on the tool specified in the config file
@@ -79,7 +87,14 @@ else:
     raise ValueError(f"unknow tools in config.yaml : '{tool}'. choose 'kraken' or 'kmer' or 'both'")
 
 
+include: "workflow/rules/checksum.smk"
 
 rule all:
     input:
-        TARGETS
+        TARGETS,
+        expand(
+            VERIFIED_CHECKSUMS,
+            zip,
+            species=samples_df["species_id"],
+            sex=samples_df["sex"],
+        )
